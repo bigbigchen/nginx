@@ -134,7 +134,13 @@ ngx_ssl_init(ngx_log_t *log)
     ERR_clear_error();
 
 #else
-
+/*
+https://linux.die.net/man/3/openssl_config
+OPENSSL_config() configures OpenSSL using the standard openssl.cnf configuration file name using config_name. If config_name is NULL then the default name openssl_conf will be used. Any errors are ignored. Further calls to OPENSSL_config() will have no effect.
+SSL socket 通讯详解 
+http://blog.csdn.net/pony_maggie/article/details/51315946
+这个函数还不太明白，以前对openssl使用方法了解太少了。
+*/
     OPENSSL_config(NULL);
 
     SSL_library_init();
