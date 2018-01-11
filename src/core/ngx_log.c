@@ -313,25 +313,30 @@ ngx_log_errno(u_char *buf, u_char *last, ngx_err_t err)
     return buf;
 }
 
-
+//prefix参数表示路径前缀 
 ngx_log_t *
 ngx_log_init(u_char *prefix)
 {
     u_char  *p, *name;
     size_t   nlen, plen;
 
+    //ngx_log_file对象是一个包含文件句柄fd和文件名称name的结构。
     ngx_log.file = &ngx_log_file;
+    //日志级别，NGX_LOG_NOTICE级别在ngx_log.h头文件已作定义
     ngx_log.log_level = NGX_LOG_NOTICE;
 
+    //错误日志文件：命令行中可以指定的参数--error-log-path=，默认是log/error.log,name为字符型指针。
     name = (u_char *) NGX_ERROR_LOG_PATH;
 
     /*
      * we use ngx_strlen() here since BCC warns about
      * condition is always false and unreachable code
      */
-
+    //错误日志文件名称的长度
     nlen = ngx_strlen(name);
 
+    //如果没有指定错误日志文件路径，那么设置为.stderr，标准错误输出
+    //这种情况直接return，没有了下面对路径的判断了。
     if (nlen == 0) {
         ngx_log_file.fd = ngx_stderr;
         return &ngx_log;
@@ -339,47 +344,51 @@ ngx_log_init(u_char *prefix)
 
     p = NULL;
 
+    //如果不是正确路径的话，绝对路径可以忽略以下检查，相对路径需要检查。
 #if (NGX_WIN32)
     if (name[1] != ':') {
 #else
     if (name[0] != '/') {
 #endif
 
-        if (prefix) {
+        //获取前缀长度：plen
+        if (prefix) {//如果本函数的前缀参数有效，那么计算前缀长度。
             plen = ngx_strlen(prefix);
 
-        } else {
+        } else {//前缀参数无效情况，利用安装参数的前缀来用，定义在这里，安装时生成的objs/ngx_auto_config.h
 #ifdef NGX_PREFIX
-            prefix = (u_char *) NGX_PREFIX;
-            plen = ngx_strlen(prefix);
+            prefix = (u_char *) NGX_PREFIX;//类型转换
+            plen = ngx_strlen(prefix);//计算长度
 #else
             plen = 0;
 #endif
         }
 
+        //如果有长度，前缀有效，那么就要和包含error_log_path的name变量中相对路径结合起来，构成绝对路径。
         if (plen) {
-            name = malloc(plen + nlen + 2);
+            name = malloc(plen + nlen + 2);//a)重新给name分配内存，意味着上面的赋值作废。
             if (name == NULL) {
                 return NULL;
             }
 
-            p = ngx_cpymem(name, prefix, plen);
+            p = ngx_cpymem(name, prefix, plen);//b)把前缀放进去。
 
-            if (!ngx_path_separator(*(p - 1))) {
+            if (!ngx_path_separator(*(p - 1))) {//c)如果尾部没有目录分隔符，那么加上去，所以参数error_log_path中尾部可加可不加/对吧。
                 *p++ = '/';
             }
 
-            ngx_cpystrn(p, (u_char *) NGX_ERROR_LOG_PATH, nlen + 1);
+            ngx_cpystrn(p, (u_char *) NGX_ERROR_LOG_PATH, nlen + 1);//d)最后把错误日志文件路径放进变量name里，指针操作。
 
-            p = name;
+            p = name;//e)完成了最后的路径p ，就是错误日志的绝对路径。是的p和name物理地址一致。
         }
     }
 
+        //打开文件描述符，赋值给错误日志对象的fd
     ngx_log_file.fd = ngx_open_file(name, NGX_FILE_APPEND,
                                     NGX_FILE_CREATE_OR_OPEN,
                                     NGX_FILE_DEFAULT_ACCESS);
 
-    if (ngx_log_file.fd == NGX_INVALID_FILE) {
+    if (ngx_log_file.fd == NGX_INVALID_FILE) {//打开无效情况。
         ngx_log_stderr(ngx_errno,
                        "[alert] could not open error log file: "
                        ngx_open_file_n " \"%s\" failed", name);
@@ -389,14 +398,14 @@ ngx_log_init(u_char *prefix)
                        ngx_open_file_n " \"%s\" failed", name);
 #endif
 
-        ngx_log_file.fd = ngx_stderr;
+        ngx_log_file.fd = ngx_stderr;//打开不了，就放在标准错误输出里了
     }
 
     if (p) {
-        ngx_free(p);
+        ngx_free(p);//释放临时变量name,p
     }
 
-    return &ngx_log;
+    return &ngx_log;//返回错误日志的对象
 }
 
 
