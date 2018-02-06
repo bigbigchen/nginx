@@ -3,6 +3,9 @@
 # Copyright (C) Igor Sysoev
 # Copyright (C) Nginx, Inc.
 
+#测试： ./configure  --prefix=/usr/local/nginx_test/ --with-http_stub_status_module  --with-http_ssl_module
+#make
+#make install
 
 #本地化设置，linux中用locale命令查看设置情况。
 #LC_ALL=C 是为了去除所有本地化的设置，让命令能正确执行。
