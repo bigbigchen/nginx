@@ -5,28 +5,28 @@
 
 help=no
 
-NGX_PREFIX=
-NGX_SBIN_PATH=
-NGX_MODULES_PATH=
-NGX_CONF_PREFIX=
-NGX_CONF_PATH=
-NGX_ERROR_LOG_PATH=
-NGX_PID_PATH=
-NGX_LOCK_PATH=
-NGX_USER=
-NGX_GROUP=
-NGX_BUILD=
+NGX_PREFIX=               #根目录
+NGX_SBIN_PATH=            #服务命令目录
+NGX_MODULES_PATH=         #模块路径，放置.so文件的?
+NGX_CONF_PREFIX=          #配置文件目录
+NGX_CONF_PATH=            #配置路径
+NGX_ERROR_LOG_PATH=       #error.log 存放路径
+NGX_PID_PATH=             #nginx.pid 存放路径
+NGX_LOCK_PATH=            #lock 存放路径
+NGX_USER=                 #所属用户
+NGX_GROUP=                #所属组
+NGX_BUILD=                #build 参数。
 
-CC=${CC:-cc}
+CC=${CC:-cc}              #cc命令
 CPP=
-NGX_OBJS=objs
+NGX_OBJS=objs             #objs目录
 
-NGX_DEBUG=NO
-NGX_CC_OPT=
-NGX_LD_OPT=
-CPU=NO
+NGX_DEBUG=NO              #debug模式开关
+NGX_CC_OPT=               #cc编译参数..
+NGX_LD_OPT=               #编译时连接参数..
+CPU=NO                    #默认没有开启利用多核CPU,我们可以通过增加worker_cpu_affinity配置参数来充分利用多核CPU。
 
-NGX_RPATH=NO
+NGX_RPATH=NO              #依赖的共享库，默认关闭。
 
 NGX_TEST_BUILD_DEVPOLL=NO
 NGX_TEST_BUILD_EVENTPORT=NO
