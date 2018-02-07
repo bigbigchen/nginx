@@ -33,9 +33,9 @@ ngx_spacer=
 
 ngx_long_regex_cont=$ngx_regex_cont
 ngx_long_cont=$ngx_cont
-
+#检测$CC命令是否可用，并且确定NGX_CC_NAME的值！
 . auto/cc/name
-
+#我在linux上编译，也没有指定$CFLAGS的值，所以为空！
 if test -n "$CFLAGS"; then
 
     CC_TEST_FLAGS="$CFLAGS $NGX_CC_OPT"
