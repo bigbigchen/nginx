@@ -22,7 +22,7 @@ NGX_USE_PCH=
 
 
 # check the echo's "-n" option and "\c" capability
-
+# ngx_n代表参数-n    ngx_c代表'\c'功能
 if echo "test\c" | grep c >/dev/null; then
 
     if echo -n test | grep n >/dev/null; then
