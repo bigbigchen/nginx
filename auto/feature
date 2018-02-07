@@ -3,8 +3,12 @@
 # Copyright (C) Nginx, Inc.
 
 
+#这个为公用的模块，当前未定义的变量都是上级已经定义的参数名称。
+
+#输出说明
 echo $ngx_n "checking for $ngx_feature ...$ngx_c"
 
+#输出日志
 cat << END >> $NGX_AUTOCONF_ERR
 
 ----------------------------------------
@@ -12,19 +16,24 @@ checking for $ngx_feature
 
 END
 
+#初始化结果变量
 ngx_found=no
 
+#如果ngx_feature_name有名字，那么得到大写后的变量ngx_have_feature
 if test -n "$ngx_feature_name"; then
     ngx_have_feature=`echo $ngx_feature_name \
                    | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
 fi
 
+#如果指定了路径，那么加入到ngx_feature_inc_path
 if test -n "$ngx_feature_path"; then
     for ngx_temp in $ngx_feature_path; do
         ngx_feature_inc_path="$ngx_feature_inc_path -I $ngx_temp"
     done
 fi
 
+#生成测试测试代码文件，ngx_feature_incs为上级给的参数
+#NGX_AUTOTEST变量为auto/init里初始化，专门用来测试的文件名称。
 cat << END > $NGX_AUTOTEST.c
 
 #include <sys/types.h>
@@ -32,6 +41,7 @@ $NGX_INCLUDE_UNISTD_H
 $ngx_feature_incs
 
 int main(void) {
+#参数ngx_feature_test，要测试的代码。
     $ngx_feature_test;
     return 0;
 }
@@ -39,33 +49,42 @@ int main(void) {
 END
 
 
+#构成编译命令，其中CC_TEST_FLAGS,CC_AUX_FLAGS这样CC_开头的文件在auto/cc/gcc(我用的是linux系统所以cc/gcc里，其他系统对应cc/目录下)里已经初始化。
 ngx_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $ngx_feature_inc_path \
           -o $NGX_AUTOTEST $NGX_AUTOTEST.c $NGX_TEST_LD_OPT $ngx_feature_libs"
 
+#该参数设置为空。
 ngx_feature_inc_path=
 
+#执行ngx_test编译命令，生成可执行文件NGX_AUTOTEST
 eval "/bin/sh -c \"$ngx_test\" >> $NGX_AUTOCONF_ERR 2>&1"
 
 
+#测试功能：如果是可以执行的话：
 if [ -x $NGX_AUTOTEST ]; then
 
     case "$ngx_feature_run" in
 
         yes)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            #如果执行成功，没有出错。
             if /bin/sh -c $NGX_AUTOTEST >> $NGX_AUTOCONF_ERR 2>&1; then
                 echo " found"
                 ngx_found=yes
 
                 if test -n "$ngx_feature_name"; then
                     have=$ngx_have_feature . auto/have
+                    #上面配置参数值为1，可用可以安装。
                 fi
 
             else
+            #出问题了，不能执行，所以当前检查内容不通过 not working.
                 echo " found but is not working"
             fi
         ;;
 
+
+        #如果成功，设置参数为指定值。
         value)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
             if /bin/sh -c $NGX_AUTOTEST >> $NGX_AUTOCONF_ERR 2>&1; then
@@ -84,6 +103,7 @@ END
             fi
         ;;
 
+        #BUG情况？
         bug)
             # /bin/sh is used to intercept "Killed" or "Abort trap" messages
             if /bin/sh -c $NGX_AUTOTEST >> $NGX_AUTOCONF_ERR 2>&1; then
@@ -99,6 +119,7 @@ END
             fi
         ;;
 
+        #其他情况，设置可用可安装参数
         *)
             echo " found"
             ngx_found=yes
@@ -110,6 +131,7 @@ END
 
     esac
 
+#没有对应可执行文件
 else
     echo " not found"
 
@@ -120,4 +142,5 @@ else
     echo "----------"    >> $NGX_AUTOCONF_ERR
 fi
 
+#检测完，配置完对应参数，那么清理测试文件了。
 rm -rf $NGX_AUTOTEST*
