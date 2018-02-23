@@ -13,25 +13,25 @@
 #include <ngx_core.h>
 
 
-typedef void *            ngx_buf_tag_t;
+typedef void *            ngx_buf_tag_t; //指向void类型的指针，该地址存放的数据的数据类型我们暂时不知道。强制类型转换，使得它用来存放我们想要存放的内容。
 
 typedef struct ngx_buf_s  ngx_buf_t;
 
 struct ngx_buf_s {
-    u_char          *pos;
-    u_char          *last;
-    off_t            file_pos;
-    off_t            file_last;
+    u_char          *pos;//位置吗位置吗
+    u_char          *last;//最后的什么
+    off_t            file_pos;//文件的偏移量-位置
+    off_t            file_last;//文件的偏移量-最后
 
-    u_char          *start;         /* start of buffer */
-    u_char          *end;           /* end of buffer */
-    ngx_buf_tag_t    tag;
-    ngx_file_t      *file;
-    ngx_buf_t       *shadow;
+    u_char          *start;         /* start of buffer *///缓冲区的开始
+    u_char          *end;           /* end of buffer */ //缓冲区的结束
+    ngx_buf_tag_t    tag; //void指针，待定。
+    ngx_file_t      *file; //文件指针
+    ngx_buf_t       *shadow; //本结构指针
 
 
     /* the buf's content could be changed */
-    unsigned         temporary:1;
+    unsigned         temporary:1;//默认unsigned int类型并且是位域为1
 
     /*
      * the buf's content is in a memory cache or in a read only memory
