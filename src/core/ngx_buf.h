@@ -37,22 +37,22 @@ struct ngx_buf_s {
      * the buf's content is in a memory cache or in a read only memory
      * and must not be changed
      */
-    unsigned         memory:1;
+    unsigned         memory:1;//buf的内容在缓存，或者在只读缓存(无法修改)
 
     /* the buf's content is mmap()ed and must not be changed */
-    unsigned         mmap:1;
+    unsigned         mmap:1;//是否buf内容映射进缓存并且无法更改
 
-    unsigned         recycled:1;
-    unsigned         in_file:1;
-    unsigned         flush:1;
-    unsigned         sync:1;
-    unsigned         last_buf:1;
-    unsigned         last_in_chain:1;
+    unsigned         recycled:1;//是否要回收?
+    unsigned         in_file:1;//是否在文件里，保存到文件里？
+    unsigned         flush:1;//是否输出
+    unsigned         sync:1;//是否同步到什么地方
+    unsigned         last_buf:1;//是否有上一个buf
+    unsigned         last_in_chain:1;//是否上一个在链条中
 
-    unsigned         last_shadow:1;
-    unsigned         temp_file:1;
+    unsigned         last_shadow:1;//是否上一个本结构对象
+    unsigned         temp_file:1;//是否临时文件
 
-    /* STUB */ int   num;
+    /* STUB */ int   num;//是否存根？
 };
 
 
