@@ -195,7 +195,7 @@ int ngx_cdecl
 main(int argc, char *const *argv)
 {
     ngx_buf_t        *b;//buf链中一个buf块(一个结构对象)的指针
-    ngx_log_t        *log;
+    ngx_log_t        *log;//log结构体对象，可能也有链条
     ngx_uint_t        i;
     ngx_cycle_t      *cycle, init_cycle;
     ngx_conf_dump_t  *cd;
