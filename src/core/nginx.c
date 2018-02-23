@@ -194,7 +194,7 @@ static char **ngx_os_environ;
 int ngx_cdecl
 main(int argc, char *const *argv)
 {
-    ngx_buf_t        *b;
+    ngx_buf_t        *b;//buf链中一个buf块(一个结构对象)的指针
     ngx_log_t        *log;
     ngx_uint_t        i;
     ngx_cycle_t      *cycle, init_cycle;
