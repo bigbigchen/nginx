@@ -48,17 +48,17 @@ typedef void (*ngx_log_writer_pt) (ngx_log_t *log, ngx_uint_t level,
 
 
 struct ngx_log_s {
-    ngx_uint_t           log_level;
-    ngx_open_file_t     *file;
+    ngx_uint_t           log_level;//数字表示日志级别
+    ngx_open_file_t     *file;//已打开的文件句柄，包括fd和name
 
-    ngx_atomic_uint_t    connection;
+    ngx_atomic_uint_t    connection;//nginx原子操作的锁，数字类型，相关在os/unix/ngx_atomic.h和core/ngx_spinlock.c
 
-    time_t               disk_full_time;
+    time_t               disk_full_time;//磁盘暴盘时间
 
-    ngx_log_handler_pt   handler;
+    ngx_log_handler_pt   handler;//句柄
     void                *data;
 
-    ngx_log_writer_pt    writer;
+    ngx_log_writer_pt    writer;//写句柄
     void                *wdata;
 
     /*
@@ -67,9 +67,9 @@ struct ngx_log_s {
      * their types all the time
      */
 
-    char                *action;
+    char                *action;//字符指针
 
-    ngx_log_t           *next;
+    ngx_log_t           *next;//下一个日志结构对象
 };
 
 
