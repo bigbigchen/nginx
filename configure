@@ -9,6 +9,7 @@
 
 #本地化设置，linux中用locale命令查看设置情况。
 #LC_ALL=C 是为了去除所有本地化的设置，让命令能正确执行。
+#语言环境设置
 LC_ALL=C
 export LC_ALL
 
