@@ -130,30 +130,30 @@ STREAM_SSL_PREREAD=NO
 
 DYNAMIC_MODULES=
 
-NGX_ADDONS=
+NGX_ADDONS=                    #插件，插件依赖，动态插件
 NGX_ADDON_DEPS=
 DYNAMIC_ADDONS=
 
-NGX_COMPAT=NO
+NGX_COMPAT=NO                   #兼容
 
-USE_PCRE=NO
+USE_PCRE=NO                     #是一个Perl库，包括 perl 兼容的正则表达式库
 PCRE=NONE
-PCRE_OPT=
-PCRE_CONF_OPT=
-PCRE_JIT=NO
+PCRE_OPT=                       #正则库参数
+PCRE_CONF_OPT=                  #正则库配置选项（参数）
+PCRE_JIT=NO                     #正则即时编译器
 
-USE_OPENSSL=NO
+USE_OPENSSL=NO                  #是否需要OPENSSL
 OPENSSL=NONE
 
-USE_ZLIB=NO
+USE_ZLIB=NO                     #ZLIB模块
 ZLIB=NONE
 ZLIB_OPT=
 ZLIB_ASM=NO
 
-USE_PERL=NO
+USE_PERL=NO                     #PERL模块
 NGX_PERL=perl
 
-USE_LIBXSLT=NO
+USE_LIBXSLT=NO                  #LIBXSLT模块
 USE_LIBGD=NO
 USE_GEOIP=NO
 
@@ -162,9 +162,9 @@ NGX_CPP_TEST=NO
 
 NGX_LIBATOMIC=NO
 
-NGX_CPU_CACHE_LINE=
+NGX_CPU_CACHE_LINE=                #CPU行缓存
 
-NGX_POST_CONF_MSG=
+NGX_POST_CONF_MSG=                 #配置消息
 
 opt=
 
