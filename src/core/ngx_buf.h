@@ -31,7 +31,7 @@ struct ngx_buf_s {
 
 
     /* the buf's content could be changed */
-    unsigned         temporary:1;//默认unsigned int类型并且是位域为1
+    unsigned         temporary:1;//buf内容是否可变；默认unsigned int类型并且是位域为1
 
     /*
      * the buf's content is in a memory cache or in a read only memory
